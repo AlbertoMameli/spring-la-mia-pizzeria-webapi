@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ingredienti</title>
+    <th:block th:replace="~{fragments/head :: head}"></th:block>
+    <link rel="stylesheet" href="stile.css">
+</head>
+
+<body>
+
+    <!-- NavBar -->
+    <section th:insert="fragments/navbar :: navbar"></section>
+
+    <main class="container py-4">
+
+        <!-- Titolo + bottone -->
+        <section class="row align-items-center mb-4">
+            <div class="col-12 col-md-8">
+                <h1 class="text-center text-md-start fw-bold">Ingredienti</h1>
+            </div>
+            <div class="col-12 col-md-4 text-center text-md-end mt-3 mt-md-0">
+                <a th:href="@{/ingredienti/create}" class="btn btn-primary">Inserisci un nuovo Ingrediente</a>
+            </div>
+        </section>
+
+        <!-- Tabella + Form per delete multipla -->
+        <form id="delete-multiplo" th:action="@{/ingredienti/delete-multiple}" method="POST">
+            <section class="row">
+                <div class="col-12">
+                    <div class="table-responsive">
+                        <table class="table table-hover table-striped align-middle text-center">
+                            <thead>
+                                <tr>
+                                    <th><input type="checkbox" id="select-all"></th>
+                                    <th>ID</th>
+                                    <th>Nome</th>
+                                    <th>Descrizione</th>
+                                    <th>Pizza Assocciata</th>
+                                    <th>Azioni</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="singleIngrediente : ${ingredienti}" th:object="${singleIngrediente}">
+                                    <td>
+                                        <input type="checkbox" name="ids" th:value="*{id}">
+                                    </td>
+                                    <td th:text="*{id}"></td>
+                                    <td th:text="*{nome}"></td>
+                                    <td th:text="*{descrizione}"></td>
+                                    <td th:text="*{pizzas.size}"></td>
+                                    <td>
+                                        <div class="d-flex flex-wrap justify-content-center gap-2">
+                                            <a th:href="@{/ingredienti/{id}(id=*{id})}"
+                                                class="btn btn-primary btn-sm">Show</a>
+                                            <a th:href="@{/ingredienti/edit/{id}(id=*{id})}"
+                                                class="btn btn-success btn-sm">Edit</a>
+                                            <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal"
+                                                th:data-bs-target="'#delete-modal-' + *{id}">
+                                                Delete
+                                            </button>
+                                        </div>
+
+                                        <!-- Modal per delete singola -->
+                                        <div class="modal fade" th:id="'delete-modal-' + *{id}"
+                                            data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                                            aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h1 class="modal-title fs-5" id="staticBackdropLabel">
+                                                            Deletion of <strong>"[[*{nome}]]"</strong>
+                                                        </h1>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p>
+                                                            Vuoi cancellare l'ingrediente
+                                                            <strong>"[[*{nome}]]"</strong> con (ID: [[*{id}]])?
+                                                        </p>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-bs-dismiss="modal">Close</button>
+                                                        <form th:action="@{|/ingredienti/delete/*{id}|}" method="post"
+                                                            class="d-inline">
+                                                            <button type="submit" class="btn btn-danger">Delete</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- fine modale singola -->
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Bottone per delete multipla -->
+            <div class="text-end mt-3">
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#bulkDeleteModal">
+                    Elimina selezionati
+                </button>
+            </div>
+        </form>
+
+        <!-- Modale delete multipla -->
+        <div class="modal fade" id="bulkDeleteModal" tabindex="-1" aria-labelledby="bulkDeleteModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="bulkDeleteModalLabel">Conferma eliminazione multipla</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                    </div>
+                    <div class="modal-body">
+                        Sei sicuro di voler eliminare tutti gli ingredienti selezionati?<br>
+                        Questa azione non può essere annullata.
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                        <button type="submit" class="btn btn-danger" form="bulk-delete-form">Conferma
+                            eliminazione</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Script per checkbox seleziona tutti -->
+
+    <script src="/js/delete-multiplo.js"></script>
+    <!-- Bootstrap JS -->
+    <th:block th:replace="~{fragments/footer :: scripts}"></th:block>
+
+</body>
+
+</html>

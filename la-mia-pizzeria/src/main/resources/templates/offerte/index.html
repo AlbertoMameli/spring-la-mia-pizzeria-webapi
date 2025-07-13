@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Offerte</title>
+    <th:block th:replace="~{fragments/head :: head}" />
+</head>
+
+<body>
+    <!-- NavBar -->
+    <section th:insert="fragments/navbar :: navbar"></section>
+
+    <main class="container mt-5">
+        <!-- Titolo -->
+        <section class="row mb-4">
+            <div class="col-12 text-center"> 
+
+                <h1 class="fw-bold">Lista Offerte</h1>
+            </div>
+        </section>
+
+        <!-- Tabella Offerte -->
+        <section class="row justify-content-center">
+            <div class="col-lg-10">
+                <table class="table table-hover table-striped align-middle text-center">
+                    <thead class="">
+                        <tr>
+                            <th>ID</th>
+                            <th>Pizza</th>
+                            <th>Titolo</th>
+                            <th>Inizio</th>
+                            <th>Fine</th>
+                            <th>Azioni</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="offerta : ${offerte}">
+                            <td th:text="${offerta.id}"></td>
+                            <td th:text="${offerta.pizza.name}"></td>
+                            <td th:text="${offerta.titolo}"></td>
+                            <td th:text="${offerta.inizioOfferta}"></td>
+                            <td th:text="${offerta.fineOfferta}"></td>
+                            <td class="text-center">
+                                <div class="d-flex gap-2 justify-content-center">
+                                    <a th:href="@{'/offerte/edit/' + ${offerta.id}}" class="btn btn-sm btn-primary">
+                                        Modifica
+                                    </a>
+
+
+                                    <!-- Bottone che apre la modale -->
+                                    <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal"
+                                        th:data-bs-target="'#delete-modal-' + ${offerta.id}">
+                                        Elimina
+                                    </button>
+                                </div>
+
+                                <!-- Modale di conferma -->
+                                <div class="modal fade" th:id="'delete-modal-' + ${offerta.id}"
+                                    data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                                    aria-labelledby="modalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="modalLabel">
+                                                    Eliminazione offerta <strong th:text="${offerta.titolo}"></strong>
+                                                </h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Chiudi"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>
+                                                    Sei sicuro di voler eliminare l'offerta
+                                                    <strong th:text="${offerta.titolo}"></strong> (ID:
+                                                    <span th:text="${offerta.id}"></span>) relativa alla pizza
+                                                    <strong th:text="${offerta.pizza.name}"></strong>?
+                                                </p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Annulla</button>
+                                                <form th:action="@{'/offerte/delete/' + ${offerta.id}}" method="POST"
+                                                    class="d-inline">
+                                                    <button type="submit" class="btn btn-danger">Conferma</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </td>
+                        </tr>
+                        <tr th:if="${offerte.size() == 0}">
+                            <td colspan="6" class="text-center">Nessuna offerta disponibile.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-8 mb-5 d-flex justify-content-around">
+                <a th:href="@{/pizzas}" class="btn btn-secondary">Torna alle pizze</a>
+                <a th:href="@{/offerte/create}" class="btn btn-success">Aggiungi Sconto</a>
+
+            </div>
+        </section>
+    </main>
+
+    <th:block th:replace="~{fragments/footer :: scripts}" />
+
+</body>
+
+</html>

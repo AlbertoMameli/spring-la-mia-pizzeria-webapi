@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizzas index</title>
+    <th:block th:replace="~{fragments/head :: head}"></th:block>
+    <link rel="stylesheet" href="stile.css">
+</head>
+
+<body>
+
+    <!-- NavBar -->
+    <section th:insert="fragments/navbar :: navbar"></section>
+
+    <main class="container py-4">
+
+        <!-- Titolo + bottone -->
+        <section class="row align-items-center mb-4">
+            <div class="col-12 col-md-8">
+                <h1 class="text-center text-md-start fw-bold">Pizza Management System</h1>
+            </div>
+            <div class="col-12 col-md-4 text-center text-md-end mt-3 mt-md-0">
+                <a th:href="@{/pizzas/create}" class="btn btn-primary">Create a new pizza</a>
+            </div>
+        </section>
+
+        <!-- Tabella -->
+        <section class="row">
+            <div class="col-12">
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped align-middle text-center">
+                        <thead>
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Description</th>
+                                <th scope="col">Price</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="singlePizza : ${pizzas}" th:object="${singlePizza}">
+                                <td th:text="*{id}"></td>
+                                <td th:text="*{name}"></td>
+                                <td th:text="*{description}"></td>
+                                <td th:text="|*{price}0$|"></td>
+                                <td>
+                                    <div class="d-flex flex-wrap justify-content-center gap-2">
+                                        <a th:href="@{/pizzas/{id}(id=*{id})}" class="btn btn-primary btn-sm">Show</a>
+                                        <a th:href="@{/pizzas/edit/{id}(id=*{id})}"
+                                            class="btn btn-success btn-sm">Edit</a>
+                                        <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal"
+                                            th:data-bs-target="'#delete-modal-' + *{id}">
+                                            Delete
+                                        </button>
+                                    </div>
+
+                                    <!-- Modal -->
+                                    <div class="modal fade" th:id="'delete-modal-' + *{id}" data-bs-backdrop="static"
+                                        data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                                        aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">
+                                                        Deletion of <strong>"[[*{name}]]"</strong>
+                                                    </h1>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>
+                                                        Are you sure you want to delete the pizza
+                                                        <strong>"[[*{name}]]"</strong> (ID: [[*{id}]])?
+                                                    </p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-bs-dismiss="modal">Close</button>
+                                                    <form th:action="@{|/pizzas/delete/*{id}|}" method="post"
+                                                        class="d-inline">
+                                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Scripts -->
+    <th:block th:replace="~{fragments/footer :: scripts}"></th:block>
+
+</body>
+
+</html>

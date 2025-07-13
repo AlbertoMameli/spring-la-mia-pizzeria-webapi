@@ -1,0 +1,27 @@
+<th:block th:fragment="navbar">
+
+    <nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
+        <div class="container-fluid">
+            <a class="navbar-brand">Pagina gestione Pizze</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-link"  th:href="@{/}">Home Page</a>
+                    <a class="nav-link" th:href="@{/pizzas}">Pizzas</a>
+                    <a class="nav-link" th:href="@{/offerte}">Offerte</a>
+                    <a class="nav-link" th:href="@{/ingredienti}">Ingredienti</a>
+                </div>
+            </div>
+
+            <div class="user-details">
+                Logged user: <span sec:authentication="name" class="me-3"></span>
+                Roles: <span sec:authentication="principal.authorities" class="me-3"></span>
+                <a th:href="@{/logout}" class="btn btn-primary">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+</th:block>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Crea Offerta</title>
+    <th:block th:replace="~{fragments/head :: head}"></th:block>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <section th:insert="fragments/navbar :: navbar"></section>
+
+    <main class="container mt-5">
+
+        <!-- Titolo -->
+        <section class="row justify-content-center">
+            <div class="col-12 text-center">
+                <h1 class="fw-bold mb-4">
+                    Crea un'offerta
+                    <span th:if="${pizza != null}" th:text="'per ' + ${pizza.name}">per Pizza</span>
+                </h1>
+            </div>
+        </section>
+
+        <!-- Form -->
+        <section class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <form th:action="@{/offerte}" th:object="${offerta}" method="POST" class="needs-validation" novalidate>
+
+                    <!-- Errori globali -->
+                    <div th:if="${#fields.hasGlobalErrors()}" class="alert alert-danger">
+                        <ul>
+                            <li th:each="err : ${#fields.globalErrors()}" th:text="${err}"></li>
+                        </ul>
+                    </div>
+
+                    <!-- Selezione pizza -->
+                    <div th:if="${pizza == null}" class="mb-3"> <!--Mostro il blocco solo se non è presente una pizza -->
+                        <label for="pizzaSelect" class="form-label">Seleziona Pizza</label>
+                        <select id="pizzaSelect" th:field="*{pizza.id}" class="form-select" required>
+                            <option value=""> Seleziona una pizza </option>
+                            <option th:each="pizza : ${pizze}" th:value="${pizza.id}" th:text="${pizza.name}"></option>
+                            <!--per ogni pizza presente nelle nostre pizze, dammi l'id e il nome di quella pizza-->
+                        </select>
+                        <div th:if="${#fields.hasErrors('pizza.id')}" class="invalid-feedback d-block">
+                            <ul>
+                                <li th:each="err : ${#fields.errors('pizza.id')}" th:text="${err}"></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Pizza pre-selezionata -->
+                    <input type="hidden" th:if="${pizza != null}" th:field="*{pizza.id}" /> <!-- se ho scelto di creare l'offerta direttamente 
+                    dalla show della pizza, 
+                    allora parte da qua la mia offerta/create-->
+
+                    <!-- Titolo -->
+                    <div class="mb-3">
+                        <label for="titolo" class="form-label">Titolo</label>
+                        <input id="titolo" type="text" th:field="*{titolo}" class="form-control" th:errorClass="is-invalid" />
+                        <div th:if="${#fields.hasErrors('titolo')}" class="invalid-feedback">
+                            <ul>
+                                <li th:each="err : ${#fields.errors('titolo')}" th:text="${err}"></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Inizio Offerta -->
+                    <div class="mb-3">
+                        <label for="inizioOfferta" class="form-label">Data Inizio</label>
+                        <input id="inizioOfferta" type="date" th:field="*{inizioOfferta}" class="form-control" th:errorClass="is-invalid" required />
+                        <div th:if="${#fields.hasErrors('inizioOfferta')}" class="invalid-feedback">
+                            <ul>
+                                <li th:each="err : ${#fields.errors('inizioOfferta')}" th:text="${err}"></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Fine Offerta -->
+                    <div class="mb-4">
+                        <label for="fineOfferta" class="form-label">Data Fine</label>
+                        <input id="fineOfferta" type="date" th:field="*{fineOfferta}" class="form-control" th:errorClass="is-invalid" required />
+                        <div th:if="${#fields.hasErrors('fineOfferta')}" class="invalid-feedback">
+                            <ul>
+                                <li th:each="err : ${#fields.errors('fineOfferta')}" th:text="${err}"></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Pulsanti -->
+                    <div class="d-flex justify-content-between gap-3">
+                        <a th:href="@{/pizzas}" class="btn btn-secondary px-4">Annulla</a>
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary px-4">Salva</button>
+                            <button type="reset" class="btn btn-warning px-4">Reset</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+    </main>
+
+    <th:block th:replace="~{fragments/footer :: scripts}"></th:block>
+</body>
+
+</html>

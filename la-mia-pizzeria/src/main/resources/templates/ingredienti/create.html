@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizzas index</title>
+    <th:block th:replace="~{fragments/head :: head}">
+    </th:block>
+    <link rel="stylesheet" href="stile.css">
+</head>
+
+<body>
+    <!-- NavBar -->
+    <section th:insert="fragments/navbar :: navbar"></section>
+
+    <main class="container">
+        <section class="upper row">
+            <div class="col-12">
+                <h1 class="card-title mb-4 p-4 text-center fw-bold">
+                    Aggiungi un nuovo ingrediente
+                </h1>
+
+        </section>
+
+        <section class="create pizza">
+            <div class="col-12 text-center">
+                <ul>
+                    <li th:each="err : ${#fields.allErrors()}" th:text="${err}">
+                    </li>
+                </ul>
+            </div>
+            <div class="col-12">
+                <form th:action="@{/ingredienti}" method="POST" th:object="${ingrediente}" id="pizza-creation-form">
+                    <div class="mb-3">
+                        <label for="nome" class="form-label">Nome:</label>
+                        <input id="nome" type="text" class="form-control mb-3" th:field="*{nome}"
+                            th:errorClass="is-invalid" >
+
+                        <div th:if="${#fields.hasErrors('nome')}" class="invalid-feedback">
+                            <ul>
+                                <li th:each="err : ${#fields.errors('nome')}" th:text="${err}"></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="descrizione" class="form-label">Descrizione:</label>
+                        <textarea id="descrizione" class="form-control mb-3" th:field="*{descrizione}" rows="4">
+                        </textarea>
+                        <div th:if="${#fields.hasErrors('descrizione')}" class="invalid-feedback">
+                            <ul>
+                                <li th:each="err : ${#fields.errors('descrizione')}" th:text="${err}"></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-12 mb-3 d-flex justify-content-between">
+                        <a th:href="@{/ingredienti}" class="btn btn-secondary">Back</a>
+                        <button type="submit" class="btn btn-success">Aggiungi</button>
+                        <button type="reset" class="btn btn-warning">Reset</button>
+
+                    </div>
+                </form>
+            </div>
+
+        </section>
+
+
+
+    </main>
+
+    <th:block th:replace="~{fragments/footer :: scripts}">
+</body>
+
+</html>

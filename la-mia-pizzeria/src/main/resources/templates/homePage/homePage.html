@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head th:replace="fragments/head :: head">
+
+<body class="">
+
+    <section th:insert="fragments/navbar :: navbar"></section>
+    <main class="container">
+        <div class="text-center mt-3">
+            <h1>Homepage</h1>
+            <h5>Pagina per la gestione del menù pizzas</h5>
+        </div>
+        <div class="row justify-content-center">
+        <img th:src="'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_l0f6qj5XUctWOerYFLnVNTGRY5eTOPoyVA&s'"
+            alt="Immagine pizza" class="img-fluid mt-4" style="max-width: 600px; width: 100%; height: auto;" />
+        </div>
+    </main>
+
+</body>
+
+</html>
